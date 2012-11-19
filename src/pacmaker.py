@@ -16,7 +16,7 @@ port = 80
 protol = 'HTTP'
 host = 'localhost'
 
-avail_protol = ('HTTP','SOCK4','SOCK5',)
+avail_protol = ('HTTP','SOCKS4','SOCKS5',)
 output = os.path.realpath('.') + os.path.sep + 'pacmaked.pac'
 autoproxy_gfwlist = "http://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt"
 online_proxy = (
@@ -58,13 +58,14 @@ def make_pac():
     pac_part = []
 
     
-    for line in (i for i in gfwlist.split('\n') if i.find("!-") != 0):
+    for line in (i for i in gfwlist.split('\n') if i.find("!") != 0 
+            and i.find('[') != 0 and len(i)>=3):
         return_str = 'return "{protol} {host}:{port}; DIRECT"; \n'.format(
                 protol=protol,
                 host=host,
                 port=port
                 )
-        print(line)
+        #print(line)
         if line.find('@@') == 0:
             return_str = 'return "DIRECT"; \n'
             line = line[2:]
@@ -80,8 +81,10 @@ def make_pac():
         pac_part.append(if_str+' '+return_str)
 
     #print(''.join(pac_part))
-    print(pac_content % (''.join(pac_part)))
+    #print(pac_content % (''.join(pac_part)))
     pac_content = pac_content % (''.join(pac_part))
+    with open(output,'w') as outfile:
+        outfile.write(pac_content)
 
 if __name__ == '__main__':
     usage = 'usage: %prog [option]'

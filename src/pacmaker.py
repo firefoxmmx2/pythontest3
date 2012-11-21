@@ -7,7 +7,7 @@
 
 import os
 from optparse import OptionParser
-from urllib.request import urlopen
+import urllib.request as req
 import urllib.parse as urlparse
 import base64
 
@@ -21,10 +21,10 @@ output = os.path.realpath('.') + os.path.sep + 'pacmaked.pac'
 autoproxy_gfwlist = "http://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt"
 online_proxy = (
         (
-            'http://www.8qi8.com/proxy.php',
+            'http://co.xinyali.info/includes/process.php?action=update',
             {
-                'server':'http://co.xinyali.info',
-                'url':autoproxy_gfwlist
+                'type':0,
+                'u':autoproxy_gfwlist
             }
         ),
         )
@@ -32,19 +32,23 @@ gfwlist_file = None
 
 
 def make_pac():
-   # data = urlparse.urlencode(online_proxy[0][1]).encode('utf8')
-    #res = urlopen(online_proxy[0][0],data)
-    #gfwlist = res.read().decode('utf-8')
-    #print({'gfwlist':gfwlist})
-    #gfwlist = base64.decodestring(gfwlist)
-    #print(gfwlist)
     
     gfwlist=None
     if gfwlist_file:
         with open(gfwlist_file,'r') as gfwfile:
             gfwlist = gfwfile.read()
             gfwlist = base64.b64decode(gfwlist).decode()
+    else:
+        import http.cookiejar
+        
+        cookie = http.cookiejar.CookieJar()
+        opener = req.build_opener(req.HTTPCookieProcessor(cookie))
+        data = urlparse.urlencode(online_proxy[0][1]).encode()
+        res = opener.open(online_proxy[0][0],data)
+        gfwlist = res.read()
+        gfwlist = base64.b64decode(gfwlist).decode()
 
+    #print(gfwlist)
     pac_content = '''
     function regExpMatch(url, pattern) {
 	    try { return new RegExp(pattern).test(url); } catch(ex) { return false; }

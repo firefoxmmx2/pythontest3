@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from matplotlib import patches, pyplot as plt
+from matplotlib import patches
+from matplotlib import pyplot as plt
 from math import sin, cos ,pi
 
 

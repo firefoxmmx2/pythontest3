@@ -27,6 +27,6 @@ def snowflake(length):
         for b in f(a):
             forward(b)
 if __name__ == '__main__':
-    #f(1000,5)
-    snowflake(500)
+    f(1000,5)
+    #snowflake(500)
 

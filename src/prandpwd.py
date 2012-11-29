@@ -2,7 +2,6 @@
 
 '''
 Created on 2012-11-28
-通过命令行,生成随机密码
 '''
 
 from optparse import OptionParser

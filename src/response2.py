@@ -15,4 +15,3 @@ print(len(content))
 print(response.status)
 print(response.fromcache)
 print(response.items())
-

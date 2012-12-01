@@ -22,7 +22,7 @@ def calc(str):
 				stk.append(str[0])
 			elif str[0] == ')':
 				while stk[-1]!='(':
-					ands[-2] = fac[stk.pop()](ans[-2],ans[-1])
+					ans[-2] = fac[stk.pop()](ans[-2],ans[-1])
 					ans.pop()
 				stk.pop()
 			else:
